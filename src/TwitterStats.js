@@ -21,12 +21,21 @@ const Title = styled.h1`
 `;
 const Main = styled.main`
     display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
 `;
 const Panel = styled.div`
     border: 1px solid #2E3039;
     -webkit-border-radius: 4px; -moz-border-radius: 4px;border-radius: 4px;
+    height: auto;
     width: calc(50% - 20px);
+    padding: 10px;
     margin: 10px;
+    box-sizing: border-box;
+    @media (max-width: 768px) {
+        //flex-direction: column;
+        width: calc(100% - 20px);
+  }
 `;
 const Footer = styled.footer`
     background: #282c34;
@@ -61,6 +70,35 @@ export default class TwitterStats extends React.Component {
             }).catch((e) => console.error('ERROR: ', e));
     }
 
+    renderTable(key){
+        const data = this.state[key];
+        if(data && data.length > 0) {
+            return (
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Count</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {
+                        data.map((row, idx) => {console.log(row);
+                            return (
+                                <tr key={idx}>
+                                    <td>{row.timestamp}</td>
+                                    <td>{row[key].toLocaleString()}</td>
+                                </tr>
+                            );
+                        })
+                    }
+                    </tbody>
+                </table>
+            );
+        }
+
+    }
+
     render() {
         console.log(this.state);
 
@@ -73,6 +111,22 @@ export default class TwitterStats extends React.Component {
                     <Panel>
                         <h2>Title</h2>
                         <div className="graph">Graph here</div>
+                        <div className="table">{this.renderTable('twitterTweetCount')}</div>
+                    </Panel>
+                    <Panel>
+                        <h2>Title</h2>
+                        <div className="graph">Graph here</div>
+                        <div className="table">{this.renderTable('twitterFollowerCount')}</div>
+                    </Panel>
+                    <Panel>
+                        <h2>Title</h2>
+                        <div className="graph">Graph here</div>
+                        <div className="table">{this.renderTable('twitterFollowingCount')}</div>
+                    </Panel>
+                    <Panel>
+                        <h2>Title</h2>
+                        <div className="graph">Graph here</div>
+                        <div className="table">{this.renderTable('twitterLikeCount')}</div>
                     </Panel>
                 </Main>
                 <Footer>
