@@ -2,5 +2,9 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/build/scraper" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/build/static/scraper" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/scraper" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/scraper/static/scraper" vcs="Git" />
   </component>
 </project>
