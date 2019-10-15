@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import moment from "moment";
+import HighchartsWrapper from "./components/HighchartsWrapper";
 
 const Container = styled.div`
     display: flex;
@@ -37,6 +39,17 @@ const Panel = styled.div`
         width: calc(100% - 20px);
   }
 `;
+const Table = styled.table`
+    width: 100%;
+    font-size: smaller;
+    border: 1px solid #2e3039;
+    th, td {
+        border: 1px solid #2e3039;
+    }
+    td:last-child {
+        text-align: center;
+    }
+`;
 const Footer = styled.footer`
     background: #282c34;
     border-top: 1px solid #585858;
@@ -70,11 +83,11 @@ export default class TwitterStats extends React.Component {
             }).catch((e) => console.error('ERROR: ', e));
     }
 
-    renderTable(key){
+    renderTable(key) {
         const data = this.state[key];
-        if(data && data.length > 0) {
+        if (data && data.length > 0) {
             return (
-                <table>
+                <Table>
                     <thead>
                     <tr>
                         <th>Date</th>
@@ -83,51 +96,68 @@ export default class TwitterStats extends React.Component {
                     </thead>
                     <tbody>
                     {
-                        data.map((row, idx) => {console.log(row);
+                        data.filter((row, idx) => (data.length <=5 || data.length - idx <= 5))
+                            .map((row, idx) => {
                             return (
                                 <tr key={idx}>
-                                    <td>{row.timestamp}</td>
+                                    <td>{moment(row.timestamp).format('MMM Do YYYY, h:mm:ss a')}</td>
                                     <td>{row[key].toLocaleString()}</td>
                                 </tr>
                             );
                         })
                     }
                     </tbody>
-                </table>
+                </Table>
             );
         }
 
     }
 
     render() {
-        console.log(this.state);
-
+        const {twitterTweetCount, twitterFollowerCount, twitterFollowingCount, twitterLikeCount} = this.state;
         return (
             <Container>
                 <Header>
                     <Title>Twitter Stats</Title>
                 </Header>
                 <Main>
-                    <Panel>
-                        <h2>Title</h2>
-                        <div className="graph">Graph here</div>
-                        <div className="table">{this.renderTable('twitterTweetCount')}</div>
-                    </Panel>
-                    <Panel>
-                        <h2>Title</h2>
-                        <div className="graph">Graph here</div>
-                        <div className="table">{this.renderTable('twitterFollowerCount')}</div>
-                    </Panel>
-                    <Panel>
-                        <h2>Title</h2>
-                        <div className="graph">Graph here</div>
-                        <div className="table">{this.renderTable('twitterFollowingCount')}</div>
-                    </Panel>
-                    <Panel>
-                        <h2>Title</h2>
-                        <div className="graph">Graph here</div>
-                        <div className="table">{this.renderTable('twitterLikeCount')}</div>
-                    </Panel>
+                    {
+                        (twitterTweetCount && twitterTweetCount.length > 0)
+                            ? <Panel>
+                                <h2>Tweet Count</h2>
+                                <div className="graph"><HighchartsWrapper data={twitterTweetCount} /></div>
+                                <div className="table">{this.renderTable('twitterTweetCount')}</div>
+                            </Panel>
+                            : null
+                    }
+                    {
+                        (twitterFollowerCount && twitterFollowerCount.length > 0)
+                            ? <Panel>
+                                <h2>Follower Count</h2>
+                                <div className="graph"><HighchartsWrapper data={twitterFollowerCount} /></div>
+                                <div className="table">{this.renderTable('twitterFollowerCount')}</div>
+                            </Panel>
+                            : null
+                    }
+                    {
+                        (twitterFollowingCount && twitterFollowingCount.length > 0)
+                            ? <Panel>
+                                <h2>Following Count</h2>
+                                <div className="graph"><HighchartsWrapper data={twitterFollowingCount} /></div>
+                                <div className="table">{this.renderTable('twitterFollowingCount')}</div>
+                            </Panel>
+                            : null
+                    }
+                    {
+                        (twitterLikeCount && twitterLikeCount.length > 0)
+                            ? <Panel>
+                                <h2>Like Count</h2>
+                                <div className="graph"><HighchartsWrapper data={twitterLikeCount} /></div>
+                                <div className="table">{this.renderTable('twitterLikeCount')}</div>
+                            </Panel>
+                            : null
+                    }
+
                 </Main>
                 <Footer>
                     <p>Made with <span role='img' aria-label='love'>❤️</span> by @clint_milner</p>
